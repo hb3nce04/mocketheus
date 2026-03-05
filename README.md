@@ -7,7 +7,7 @@
 [![Handlebars](https://img.shields.io/badge/Templating-Handlebars.js-f0772b?logo=handlebars.js&logoColor=white)](https://handlebarsjs.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind--CSS-38bdf8?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-**Mocketheus** is a developer tool designed to make Prometheus testing painless. Instead of writing complex exporters or static configuration files, Mocketheus provides a **modern Web UI** to create, manage, and simulate metrics in real-time.
+**Mocketheus** is a developer tool designed to make Prometheus testing painless. Instead of writing complex exporters or static configuration files, Mocketheus provides a **modern Web UI** to create, manage, and simulate metrics in real-time. UI driven metrics mocking.
 
 ---
 
