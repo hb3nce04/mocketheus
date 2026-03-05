@@ -1,56 +1,67 @@
-import client from 'prom-client';
+import client, {Counter, Gauge} from 'prom-client';
+import { Request, Response } from 'express';
+import {MetricEntry, MetricKind, MetricsStore} from "../types/metrics.js";
 
 const register = new client.Registry();
-const metricsStore = {};
+const metricsStore: MetricsStore = {};
 
-const getMetrics = async (req, res) => {
-    Object.values(metricsStore).forEach(metrics => {
-        if (metrics.type === 'gauge') metrics.metric.set(metrics.value);
+const getMetrics = async (req: Request, res: Response): Promise<void> => {
+    Object.values(metricsStore).forEach((entry: MetricEntry) => {
+        if (entry.type === 'gauge' && entry.metric instanceof Gauge) {
+            entry.metric.set(entry.value);
+        }
     });
+
     res.setHeader('Content-Type', register.contentType);
     res.end(await register.metrics());
 };
 
-const registerMetric = (name, type, help, value) => {
+const registerMetric = (name: string, type: string, help: string, value: string): void => {
     if (!metricsStore[name]) {
-        let metric;
+        let metric: Gauge<string> | Counter<string>;
+
         if (type === 'gauge') {
             metric = new client.Gauge({ name, help });
-        }
-        if (type === 'counter') {
+        } else if (type === 'counter') {
             metric = new client.Counter({ name, help });
+        } else {
+            return;
         }
+
         register.registerMetric(metric);
         const numericValue = Number(value) || 0;
+
         metricsStore[name] = {
-            type,
+            type: type as MetricKind,
             metric,
             value: numericValue,
             help
         };
-        if (type === 'gauge') {
+
+        if (metric instanceof Gauge) {
             metric.set(numericValue);
-        }
-        if (type === 'counter' && numericValue > 0) {
+        } else if (metric instanceof Counter && numericValue > 0) {
             metric.inc(numericValue);
         }
     }
 };
 
-const changeMetrics = (name, value) => {
-    const m = metricsStore[name];
-    if (!m) return;
+const changeMetrics = (name: string, value: string | number): void => {
+    const entry = metricsStore[name];
+    if (!entry) return;
+
     const numericValue = Number(value) || 0;
-    const metric = m.metric;
-    if (m.type === 'gauge') {
+    const { metric } = entry;
+
+    if (entry.type === 'gauge' && metric instanceof Gauge) {
         metric.set(numericValue);
-        m.value = numericValue;
+        entry.value = numericValue;
     }
-    if (m.type === 'counter') {
-        const diff = numericValue - m.value;
+    else if (entry.type === 'counter' && metric instanceof Counter) {
+        const diff = numericValue - entry.value;
         if (diff > 0) {
             metric.inc(diff);
-            m.value = numericValue;
+            entry.value = numericValue;
         }
     }
 };

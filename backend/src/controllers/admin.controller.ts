@@ -1,6 +1,7 @@
 import {changeMetrics, metricsStore, registerMetric} from "./metrics.controller.js";
+import { Request, Response } from 'express';
 
-const renderAdminPage = (req, res) => {
+const renderAdminPage = (req: Request, res: Response) => {
     return res.render('admin', {
         metrics: Object.entries(metricsStore).map(([name, m]) => ({
             name,
@@ -11,13 +12,13 @@ const renderAdminPage = (req, res) => {
     });
 }
 
-const createMetric = (req, res) => {
+const createMetric = (req: Request, res: Response) => {
     const { name, type, help, value } = req.body;
     registerMetric(name, type, help, value)
     return res.redirect('/admin');
 };
 
-const updateMetric = (req, res) => {
+const updateMetric = (req: Request, res: Response) => {
     const { name, value } = req.body;
     changeMetrics(name, value)
     return res.redirect('/admin');

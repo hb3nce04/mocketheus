@@ -7,9 +7,10 @@ import logger from 'morgan';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import {engine} from "express-handlebars";
-import metricsRoute from './routes/metrics.route.ts';
-import adminRoute from "./routes/admin.route.ts";
+import metricsRoute from './routes/metrics.route.js';
+import adminRoute from "./routes/admin.route.js";
 
+// @ts-ignore
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
