@@ -46,7 +46,7 @@ Mocketheus acts as a bridge between your manual testing needs and the Prometheus
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/hb3nce04/mocketheus.git](https://github.com/hb3nce04/mocketheus.git)
+   git clone https://github.com/hb3nce04/mocketheus.git
 
 2. **Install:**
    ```bash
