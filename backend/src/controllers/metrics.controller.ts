@@ -66,4 +66,12 @@ const changeMetrics = (name: string, value: string | number): void => {
     }
 };
 
-export {metricsStore, getMetrics, registerMetric, changeMetrics};
+const removeMetric = (name: string): void => {
+    const entry = metricsStore[name];
+    if (!entry) return;
+    delete metricsStore[name];
+    // Error: A metric with the name asd has already been registered.
+    register.removeSingleMetric(name);
+}
+
+export {metricsStore, getMetrics, registerMetric, changeMetrics, removeMetric};

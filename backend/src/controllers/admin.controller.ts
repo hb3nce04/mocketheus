@@ -1,4 +1,4 @@
-import {changeMetrics, metricsStore, registerMetric} from "./metrics.controller.js";
+import {changeMetrics, metricsStore, registerMetric, removeMetric} from "./metrics.controller.js";
 import { Request, Response } from 'express';
 
 const renderAdminPage = (req: Request, res: Response) => {
@@ -23,5 +23,10 @@ const updateMetric = (req: Request, res: Response) => {
     changeMetrics(name, value)
     return res.redirect('/admin');
 }
+export const deleteMetric = (req: Request, res: Response) => {
+    const { name } = req.body;
+    removeMetric(name)
+    return res.redirect('/admin');
+};
 
 export {renderAdminPage, createMetric, updateMetric};
