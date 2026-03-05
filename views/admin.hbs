@@ -1,0 +1,72 @@
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6 text-gray-200">
+        Prometheus Mocker
+    </h1>
+    <div class="bg-white rounded-xl shadow p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">Create Metric</h2>
+        <form method="POST" action="/admin" class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="text-sm text-gray-600">Name</label>
+                <input name="name"
+                       class="w-full border rounded-lg p-2 mt-1 focus:ring focus:ring-blue-200"/>
+            </div>
+            <div>
+                <label class="text-sm text-gray-600">Type</label>
+                <select name="type"
+                        class="w-full border rounded-lg p-2 mt-1">
+                    <option value="gauge">Gauge</option>
+                    <option value="counter">Counter</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-sm text-gray-600">Help</label>
+                <input name="help"
+                       class="w-full border rounded-lg p-2 mt-1"/>
+            </div>
+            <div>
+                <label class="text-sm text-gray-600">Value</label>
+                <input name="value"
+                       class="w-full border rounded-lg p-2 mt-1"/>
+            </div>
+            <div class="col-span-2">
+                <button
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">
+            Existing Metrics
+        </h2>
+        <div class="space-y-4">
+            {{#each metrics}}
+                <div class="flex items-center justify-between border rounded-lg p-4">
+                    <div>
+                        <div class="font-medium text-gray-800">
+                            {{this.name}} ({{this.help}})
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            {{this.type}}
+                        </div>
+                    </div>
+                    <form method="POST"
+                          action="/admin/update"
+                          class="flex gap-2 items-center">
+                        <input type="hidden"
+                               name="name"
+                               value="{{this.name}}"/>
+                        <input name="value"
+                               value="{{this.value}}"
+                               class="border rounded-lg p-2 w-24"/>
+                        <button
+                                class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700">
+                            Update
+                        </button>
+                    </form>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
